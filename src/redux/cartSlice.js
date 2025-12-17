@@ -23,7 +23,7 @@ const cartSlice = createSlice({
                 state.cartItems.push(action.payload);
                 state.totalPrice += action.payload.price * action.payload.quantity;
                 state.totalQuantity += action.payload.quantity;
-                toast.success("Product added to cart");
+                toast.sucess("Product added to cart");
             }
         },
         removeFromCart: (state, action) => {
