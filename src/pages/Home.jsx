@@ -3,26 +3,32 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addToCart } from '../redux/cartSlice';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   console.log(products, 'products');
   const cartItems = useSelector(state => state.cart.cartItems);
   const dispatch = useDispatch();
+  const location=useLocation();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          'https://dummyjson.com/products?limit=20'
-        );
+        const params=new URLSearchParams(location.search);
+        const searchQuery=params.get('search');
+        let url='https://dummyjson.com/products?limit=20';
+        if (searchQuery) {
+            url=`https://dummyjson.com/products/search?q=${searchQuery}`;
+        }
+        const response = await axios.get(url);
         setProducts(response.data.products);
       } catch (error) {
         toast.error('Failed to fetch products');
       }
     };
     fetchProducts();
-  }, []);
+  }, [location.search]);
 
   const handleAddToCart = product => {
     const exists = cartItems.find(item => item.id === product.id);
@@ -34,7 +40,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="px-8 min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -49,7 +55,7 @@ const Home = () => {
             <p className="text-gray-700 mb-2">${product.price}</p>
             <button
               onClick={() => handleAddToCart(product)}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
               Add to Cart
             </button>

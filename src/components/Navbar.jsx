@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { searchProducts } from '../redux/productsSlice';
+import { ShoppingCart } from 'lucide-react';
 
 const Navbar = () => {
   const [query, setQuery] = useState('');
@@ -10,16 +11,16 @@ const Navbar = () => {
 
   const handleSearch = e => {
     e.preventDefault();
-    if (!query.trim() != '') {
+    if (query.trim() != "") {
       dispatch(searchProducts(query));
 
       navigate(`/?search=${query}`);
-      setQuery('');
+      setQuery("");
     }
   };
 
   return (
-    <nav className="bg-white shadow-md p-4 flex flex-col sm:flex-row items-center justify-between">
+    <nav className="bg-white shadow-md px-8 py-4 flex flex-col sm:flex-row items-center justify-between">
       <div className="text-2xl font-bold text-blue-600">
         <Link to="/">My Store </Link>
       </div>
@@ -32,6 +33,8 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Search products..."
+          value={query}
+          onChange={(e)=>setQuery(e.target.value)}
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
@@ -50,7 +53,7 @@ const Navbar = () => {
           to="/cart"
           className="text-white bg-blue-500 px-3 py-1 rounded hover:bg-blue-600 font-medium"
         >
-          Cart
+          <ShoppingCart />
         </Link>
       </div>
     </nav>

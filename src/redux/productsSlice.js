@@ -12,7 +12,7 @@ export const fetchProducts = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   'products/searchProducts',
   async searchTerm => {
-    const response = await fetch('https://dummyjson.com/products?limit=20');
+    const response = await fetch(`https://dummyjson.com/products/search?q=${searchTerm}`);
     const data = await response.json();
     return data.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
