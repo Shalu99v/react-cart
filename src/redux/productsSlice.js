@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch('https://dummyjson.com/products?limit=20');
     const data = await response.json();
     return data;
   }
@@ -12,7 +12,7 @@ export const fetchProducts = createAsyncThunk(
 export const searchProducts = createAsyncThunk(
   'products/searchProducts',
   async searchTerm => {
-    const response = await fetch('https://fakestoreapi.com/products');
+    const response = await fetch('https://dummyjson.com/products?limit=20');
     const data = await response.json();
     return data.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -27,7 +27,11 @@ const productsSlice = createSlice({
     error: null,
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    setProducts: (state, action) => {
+      state.products = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchProducts.pending, state => {
@@ -58,4 +62,5 @@ const productsSlice = createSlice({
       });
   },
 });
+export const {setProducts} = productsSlice.actions;
 export default productsSlice.reducer;
